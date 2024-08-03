@@ -1,0 +1,25 @@
+<div class="grid px-5">
+    <div class="col-12 text-center py-5">
+        <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+        </p-iconField>
+    </div>
+    <div class="col-12">
+        <div class="grid w-full">
+            @for (script of scripts; track $index) {
+            <p-card [header]="script.title" class="col-6">
+                <div>{{script.code}}</div>
+                <p-footer >
+                    <div class="grid justify-content-end gap-1">
+                        <p-button label="Execute" icon="pi pi-code" size="small"/>
+                        <p-button label="Copy" icon="pi pi-copy" size="small" severity="secondary" (click)="copy(script.code)"/>
+                        <p-button label="Edit" icon="pi pi-pencil" size="small" severity="warning"/>
+                        <p-button  icon="pi pi-trash" size="small" severity="danger"/>
+                    </div>
+                </p-footer>
+            </p-card>
+            }
+        </div>
+    </div>
+</div>
