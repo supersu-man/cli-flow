@@ -5,6 +5,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 
+// declare const window: any;
 @Component({
   selector: 'app-tab',
   standalone: true,
@@ -33,8 +34,10 @@ export class TabComponent {
     navigator.clipboard.writeText(text);
   }
 
-  execute = (code: string) => {
-
+  execute = async (code: string) => {
+    console.log((window as any))
+    const t = await (window as any).api.getPaths()
+    console.log(t)
   }
 
   delete = (id: string) => {
