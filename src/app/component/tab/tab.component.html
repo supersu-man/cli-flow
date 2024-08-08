@@ -26,7 +26,7 @@
 
 <p-button class="absolute bottom-0 right-0 p-5" icon="pi pi-plus" size="small" (click)="openScriptDialog('')"/>
 
-<p-dialog header="Add Script" [modal]="true" [(visible)]="scriptDialog" [style]="{ width: '40rem' }" [draggable]="false" [formGroup]="scriptForm">
+<p-dialog [header]="scriptForm.controls.title.value? 'Edit Script' : 'Add Script'" [modal]="true" [(visible)]="scriptDialog" [style]="{ width: '40rem' }" [draggable]="false" [formGroup]="scriptForm">
     <div class="flex align-items-center gap-3 my-3">
         <label class="font-semibold w-6rem">Title</label>
         <input pInputText class="flex-auto" formControlName="title"/>
