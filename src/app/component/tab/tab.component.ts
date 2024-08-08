@@ -1,47 +1,73 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
+
 
 // declare const window: any;
 @Component({
   selector: 'app-tab',
   standalone: true,
-  imports: [ InputTextModule, IconFieldModule, InputIconModule, CardModule, ButtonModule ],
+  imports: [ InputTextModule, IconFieldModule, InputIconModule, CardModule, ButtonModule, DialogModule, InputTextareaModule, ReactiveFormsModule ],
   templateUrl: './tab.component.html',
   styles: ``
 })
-export class TabComponent {
+export class TabComponent implements OnInit {
 
-  scripts = [
-    {
-      title: 'Move TNService to docker',
-      code: 'docker exec -it 5fb016c39e1b /bin/bash',
-    },
-    {
-      title: 'Move TNService to docker',
-      code: 'docker exec -it 5fb016c39e1b /bin/bash',
-    },
-    {
-      title: 'Move TNService to docker',
-      code: 'docker exec -it 5fb016c39e1b /bin/bash',
-    }
-  ]
+  scriptDialog = false
+
+  scriptForm = new FormGroup({
+    title: new FormControl(null, Validators.required),
+    code: new FormControl(null, Validators.required)
+  })
+
+  scripts: { id: string, title: string, code: string }[] = []
+
+  ngOnInit(): void {
+    this.getScripts()
+  }
+
+  getScripts = async () => {
+    this.scripts = await (window as any).api.getScripts()
+    console.log(this.scripts)
+  }
+
+  execute = async (code: string) => {
+    //todo
+  }
+
+  editScript = (script: any) => {
+    //todo
+  }
 
   copy = (text: string) => {
     navigator.clipboard.writeText(text);
   }
 
-  execute = async (code: string) => {
-    console.log((window as any))
-    const t = await (window as any).api.getPaths()
-    console.log(t)
+  delete = async (id: string) => {
+    const scripts = await (window as any).api.deleteScript(id)
+    this.scripts = scripts
   }
 
-  delete = (id: string) => {
-    
+  addScript = async () => {
+    const scripts = await (window as any).api.addScript(this.scriptForm.getRawValue())
+    this.scripts = scripts
+  }
+
+  openScriptDialog = (script: any) => {
+    if (script) {
+      this.scriptForm.patchValue(script)
+    } else {
+      this.scriptForm.reset()
+      this.scriptDialog = true
+    }
+    this.scriptDialog = true
   }
 
 }
