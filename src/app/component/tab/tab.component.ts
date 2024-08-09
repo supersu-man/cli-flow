@@ -23,7 +23,7 @@ export class TabComponent implements OnInit {
   scriptDialog = false
 
   scriptForm = new FormGroup({
-    id: new FormControl(null, Validators.required),
+    id: new FormControl(null),
     title: new FormControl(null, Validators.required),
     code: new FormControl(null, Validators.required)
   })
@@ -54,7 +54,7 @@ export class TabComponent implements OnInit {
   }
 
   saveScript = async () => {
-    if (this.scriptForm.controls.id) {
+    if (this.scriptForm.controls.id.value) {
       const scripts = await (window as any).api.editScript(this.scriptForm.getRawValue())
       this.scripts = scripts
     } else {
