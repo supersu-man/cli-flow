@@ -2,14 +2,15 @@
   "name": "cli-flow",
   "version": "0.0.0",
   "description": "ada",
-  "main": "dist/main.js",
+  "main": "build/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --base-href .",
-    "build-electron": "tsc --project tsconfig.electron.json",
-    "electron": "npm run build && npm run build-electron && electron ./dist/main.js",
-    "electron-dev": "npm run build-electron && electron ./dist/main.js --dev"
+    "electron-build": "tsc --project tsconfig.electron.json",
+    "electron": "npm run build && npm run electron-build && electron ./build/main.js",
+    "electron-dev": "npm run electron-build && electron ./build/main.js --dev",
+    "electron-package": "npm run build && npm run electron-build && npx electron-builder"
   },
   "author": "Sumanth Perambuduri <sumanthpera444@gmail.com> (https://sumanth.dev)",
   "private": true,
@@ -43,7 +44,7 @@
   "build": {
     "appId": "dev.sumanth.cliflow",
     "files": [
-      "dist/*"
+      "build/"
     ]
   }
 }

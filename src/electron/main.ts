@@ -28,7 +28,7 @@ function createWindow() {
   }
 
   mainWindow.removeMenu()
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow.destroy()
