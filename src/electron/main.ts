@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import { v4 as uuid } from 'uuid';
+import { execSync } from 'child_process';
 
 
 let mainWindow: Electron.BrowserWindow;
@@ -26,7 +27,8 @@ function createWindow() {
     mainWindow.loadURL(path.join(__dirname, 'browser/index.html'))
   }
 
-  //mainWindow.webContents.openDevTools();
+  mainWindow.removeMenu()
+  mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow.destroy()
@@ -79,6 +81,12 @@ ipcMain.handle('deleteScript', (event, id: string) => {
   return scripts
 })
 
-ipcMain.handle('executeScript', async (event, code: string) => {
-  //todo
+ipcMain.handle('executeScript', (event, code: string) => {
+  let returnData : { output: string, error: boolean }
+  try {
+    returnData = { output: execSync(code).toString(), error: false }
+  } catch (error: any) {
+    returnData = { output: error.message, error: true } 
+  }
+  return returnData
 })

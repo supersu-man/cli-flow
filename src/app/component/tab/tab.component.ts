@@ -43,8 +43,8 @@ export class TabComponent implements OnInit {
   }
 
   execute = async (code: string) => {
-    const output = await (window as any).api.executeScript(code)
-    console.log(output)
+    const returnData = await (window as any).api.executeScript(code)
+    console.log(returnData)
   }
 
   copy = (text: string) => {
