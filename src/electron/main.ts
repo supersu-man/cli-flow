@@ -53,7 +53,6 @@ ipcMain.handle('getScripts', () => {
 })
 
 ipcMain.handle('addScript', (event, script: any) => {
-  console.log(script)
   let scripts = Store.get('scripts', [])
   script.id = uuid()
   scripts.push(script)
@@ -63,19 +62,23 @@ ipcMain.handle('addScript', (event, script: any) => {
 
 ipcMain.handle('editScript', (event, script: any) => {
   let scripts = Store.get('scripts', []) as {id:string, title: string, code: string}[]
-  scripts.forEach((obj) => {
-    if (script.id == obj) {
-      obj.title = script.title
-      obj.code = script.code
+  scripts.forEach((eachScript) => {
+    if (script.id == eachScript.id) {
+      eachScript.title = script.title
+      eachScript.code = script.code
     }
   })
   Store.set('scripts', scripts)
   return scripts
 })
 
-ipcMain.handle('deleteScript', (event, id: any) => {
+ipcMain.handle('deleteScript', (event, id: string) => {
   let scripts = Store.get('scripts', []) as {id:string, title: string, code: string}[]
   scripts = scripts.filter((script) => script.id != id)
   Store.set('scripts', scripts)
   return scripts
+})
+
+ipcMain.handle('executeScript', async (event, code: string) => {
+  //todo
 })

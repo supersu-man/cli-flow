@@ -23,6 +23,7 @@ export class TabComponent implements OnInit {
   scriptDialog = false
 
   scriptForm = new FormGroup({
+    id: new FormControl(null, Validators.required),
     title: new FormControl(null, Validators.required),
     code: new FormControl(null, Validators.required)
   })
@@ -39,11 +40,8 @@ export class TabComponent implements OnInit {
   }
 
   execute = async (code: string) => {
-    //todo
-  }
-
-  editScript = (script: any) => {
-    //todo
+    const output = await (window as any).api.executeScript(code)
+    console.log(output)
   }
 
   copy = (text: string) => {
@@ -55,9 +53,14 @@ export class TabComponent implements OnInit {
     this.scripts = scripts
   }
 
-  addScript = async () => {
-    const scripts = await (window as any).api.addScript(this.scriptForm.getRawValue())
-    this.scripts = scripts
+  saveScript = async () => {
+    if (this.scriptForm.controls.id) {
+      const scripts = await (window as any).api.editScript(this.scriptForm.getRawValue())
+      this.scripts = scripts
+    } else {
+      const scripts = await (window as any).api.addScript(this.scriptForm.getRawValue())
+      this.scripts = scripts
+    }
   }
 
   openScriptDialog = (script: any) => {
@@ -65,7 +68,6 @@ export class TabComponent implements OnInit {
       this.scriptForm.patchValue(script)
     } else {
       this.scriptForm.reset()
-      this.scriptDialog = true
     }
     this.scriptDialog = true
   }
