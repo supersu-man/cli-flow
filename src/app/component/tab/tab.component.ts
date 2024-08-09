@@ -27,6 +27,9 @@ export class TabComponent implements OnInit {
     title: new FormControl(null, Validators.required),
     code: new FormControl(null, Validators.required)
   })
+  searchForm = new FormGroup({
+    text: new FormControl(null),
+  })
 
   scripts: { id: string, title: string, code: string }[] = []
 
