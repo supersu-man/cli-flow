@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 
 
@@ -33,36 +34,46 @@ export class TabComponent implements OnInit {
 
   scripts: { id: string, title: string, code: string }[] = []
 
+  constructor(private messageService: MessageService) { }
+
+
   ngOnInit(): void {
     this.getScripts()
   }
 
   getScripts = async () => {
     this.scripts = await (window as any).api.getScripts()
-    console.log(this.scripts)
   }
 
   execute = async (code: string) => {
     const returnData = await (window as any).api.executeScript(code)
-    console.log(returnData)
+    if (returnData.error) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: returnData.output });
+    } else {
+      this.messageService.add({ severity: 'success', summary: 'Executed', detail: 'Script executed sucessfully' });
+    }
   }
 
   copy = (text: string) => {
     navigator.clipboard.writeText(text);
+    this.messageService.add({ severity: 'success', summary: 'Copied', detail: 'Script copied sucessfully' });
   }
 
   delete = async (id: string) => {
     const scripts = await (window as any).api.deleteScript(id)
     this.scripts = scripts
+    this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Script deleted sucessfully' });
   }
 
   saveScript = async () => {
     if (this.scriptForm.controls.id.value) {
       const scripts = await (window as any).api.editScript(this.scriptForm.getRawValue())
       this.scripts = scripts
+      this.messageService.add({ severity: 'success', summary: 'Edited', detail: 'Script edited sucessfully' });
     } else {
       const scripts = await (window as any).api.addScript(this.scriptForm.getRawValue())
       this.scripts = scripts
+      this.messageService.add({ severity: 'success', summary: 'Added', detail: 'Script added sucessfully' });
     }
   }
 

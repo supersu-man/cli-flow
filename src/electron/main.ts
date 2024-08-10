@@ -12,7 +12,6 @@ import("electron-store").then((value) => {
 })
 
 function createWindow() {
-  // Create the browser window.
   mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
@@ -24,11 +23,9 @@ function createWindow() {
   if(process.argv.includes('--dev')) {
     mainWindow.loadURL('http://localhost:4200')
   } else {
+    mainWindow.removeMenu()
     mainWindow.loadURL(path.join(__dirname, 'browser/index.html'))
   }
-
-  mainWindow.removeMenu()
-  // mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow.destroy()
