@@ -16,7 +16,7 @@
                             <p-button label="Execute" icon="pi pi-code" size="small" (click)="execute(script.code)" />
                             <p-button label="Copy" icon="pi pi-copy" size="small" severity="secondary" (click)="copy(script.code)"/>
                             <p-button label="Edit" icon="pi pi-pencil" size="small" severity="warning" (click)="openScriptDialog(script)"/>
-                            <p-button  icon="pi pi-trash" size="small" severity="danger"/>
+                            <p-button  icon="pi pi-trash" size="small" severity="danger" (click)="delete(script.id)"/>
                         </div>
                     </p-footer>
                 </p-card>
