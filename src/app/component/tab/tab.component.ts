@@ -6,9 +6,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-
 
 
 // declare const window: any;
@@ -22,7 +21,6 @@ import { MessageService } from 'primeng/api';
 export class TabComponent implements OnInit {
 
   scriptDialog = false
-
   scriptForm = new FormGroup({
     id: new FormControl(null),
     title: new FormControl(null, Validators.required),
@@ -33,6 +31,7 @@ export class TabComponent implements OnInit {
   })
 
   scripts: { id: string, title: string, code: string }[] = []
+  spinners: string[] = []
 
   constructor(private messageService: MessageService) { }
 
@@ -45,13 +44,15 @@ export class TabComponent implements OnInit {
     this.scripts = await (window as any).api.getScripts()
   }
 
-  execute = async (code: string) => {
-    const returnData = await (window as any).api.executeScript(code)
+  execute = async (script: { id: string, title: string, code: string }) => {
+    this.spinners.push(script.id)
+    const returnData = await (window as any).api.executeScript(script.code)
     if (returnData.error) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: returnData.output });
     } else {
-      this.messageService.add({ severity: 'success', summary: 'Executed', detail: 'Script executed sucessfully' });
+      this.messageService.add({ severity: 'success', summary: 'Executed', detail: returnData.output });
     }
+    this.spinners = this.spinners.filter((id) => script.id != id)
   }
 
   copy = (text: string) => {
