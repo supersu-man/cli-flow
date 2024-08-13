@@ -24,7 +24,7 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:4200')
   } else {
     mainWindow.removeMenu()
-    mainWindow.loadURL(path.join(__dirname, 'browser/index.html'))
+    mainWindow.loadFile(path.join(__dirname, 'browser/index.html'))
   }
 
   mainWindow.on('closed', () => {
