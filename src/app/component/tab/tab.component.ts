@@ -8,13 +8,14 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { ToolbarModule } from 'primeng/toolbar';
 
 
 // declare const window: any;
 @Component({
   selector: 'app-tab',
   standalone: true,
-  imports: [ InputTextModule, IconFieldModule, InputIconModule, CardModule, ButtonModule, DialogModule, InputTextareaModule, ReactiveFormsModule ],
+  imports: [ InputTextModule, CardModule, ButtonModule, DialogModule, InputTextareaModule, ReactiveFormsModule, ToolbarModule ],
   templateUrl: './tab.component.html',
   styles: ``
 })

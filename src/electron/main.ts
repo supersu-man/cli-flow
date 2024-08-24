@@ -20,10 +20,11 @@ function createWindow() {
     },
   });
 
+  mainWindow.removeMenu()
   if(process.argv.includes('--dev')) {
     mainWindow.loadURL('http://localhost:4200')
+    mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.removeMenu()
     mainWindow.loadFile(path.join(__dirname, 'browser/index.html'))
   }
 

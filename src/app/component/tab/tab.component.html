@@ -1,32 +1,32 @@
-<div class="grid px-5">
-    <div class="col-12 text-center py-5">
-        <p-iconField iconPosition="left" [formGroup]="searchForm">
-            <p-inputIcon styleClass="pi pi-search" />
-            <input type="text" pInputText placeholder="Search" formControlName="text"/>
-        </p-iconField>
+<p-toolbar styleClass="p-2 mb-3">
+    <div class="p-toolbar-group-start">
+        <span class="p-input-icon-left" [formGroup]="searchForm">
+            <i class="pi pi-search"></i>
+            <input pInputText placeholder="Search" formControlName="text"/>
+        </span>
     </div>
-    <div class="col-12">
-        <div class="grid w-full">
-            @for (script of scripts; track $index) {
-                @if (script.title.includes(searchForm.controls.text.value || '') || script.code.includes(searchForm.controls.text.value || '')) {
-                <p-card [header]="script.title" class="col-6">
-                    <div>{{script.code}}</div>
-                    <p-footer >
-                        <div class="grid justify-content-end gap-1">
-                            <p-button label="Execute" icon="pi pi-code" size="small" (click)="execute(script)" [loading]="spinners.includes(script.id)"/>
-                            <p-button label="Copy" icon="pi pi-copy" size="small" severity="secondary" (click)="copy(script.code)"/>
-                            <p-button label="Edit" icon="pi pi-pencil" size="small" severity="warning" (click)="openScriptDialog(script)"/>
-                            <p-button  icon="pi pi-trash" size="small" severity="danger" (click)="delete(script.id)"/>
-                        </div>
-                    </p-footer>
-                </p-card>
-                }
-            }
-        </div>
+    <div class="p-toolbar-group-end">
+        <p-button icon="pi pi-plus" size="small" (click)="openScriptDialog('')"/>
     </div>
-</div>
+</p-toolbar>
 
-<p-button class="absolute bottom-0 right-0 p-5" icon="pi pi-plus" size="small" (click)="openScriptDialog('')"/>
+<div class="grid">
+    @for (script of scripts; track $index) {
+        @if (script.title.includes(searchForm.controls.text.value || '') || script.code.includes(searchForm.controls.text.value || '')) {
+        <p-card [header]="script.title" class="col-6">
+            <div>{{script.code}}</div>
+            <p-footer >
+                <div class="grid justify-content-end gap-1">
+                    <p-button label="Execute" icon="pi pi-code" size="small" (click)="execute(script)" [loading]="spinners.includes(script.id)"/>
+                    <p-button label="Copy" icon="pi pi-copy" size="small" severity="secondary" (click)="copy(script.code)"/>
+                    <p-button label="Edit" icon="pi pi-pencil" size="small" severity="warning" (click)="openScriptDialog(script)"/>
+                    <p-button  icon="pi pi-trash" size="small" severity="danger" (click)="delete(script.id)"/>
+                </div>
+            </p-footer>
+        </p-card>
+        }
+    }
+</div>
 
 <p-dialog [header]="scriptForm.controls.id.value? 'Edit Script' : 'Add Script'" [modal]="true" [(visible)]="scriptDialog" [style]="{ width: '40rem' }" [draggable]="false" [formGroup]="scriptForm">
     <div class="flex align-items-center gap-3 my-3">
