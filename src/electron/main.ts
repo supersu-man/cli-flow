@@ -11,6 +11,8 @@ import("electron-store").then((value) => {
   Store = new value.default()
 })
 
+const assetsPath = process.argv.includes('--dev') ? '../src/assets' : 'browser/assets'
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     height: 600,
@@ -18,6 +20,7 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
+    icon: path.join(__dirname, assetsPath + '/icon.png')
   });
 
   mainWindow.removeMenu()
