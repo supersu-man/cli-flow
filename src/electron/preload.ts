@@ -5,4 +5,5 @@ contextBridge.exposeInMainWorld('api', {
     editScript: (script: { id:string, title: string, code: string }) => ipcRenderer.invoke('editScript', script),
     deleteScript: (id: string) => ipcRenderer.invoke('deleteScript', id),
     executeScript: (code: string) => ipcRenderer.invoke('executeScript', code),
+    scriptOutput: (callback: (value: { output: string, error: boolean }) => void) => ipcRenderer.on('scriptOutput', ((_event, value) => callback(value)))
 })

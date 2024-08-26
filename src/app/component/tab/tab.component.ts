@@ -38,7 +38,15 @@ export class TabComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getScripts()
+    this.getScripts();
+    (window as any).api.scriptOutput((returnData: { output: string, error: boolean }) => {
+      if (returnData.error) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: returnData.output });
+      } else {
+        this.messageService.add({ severity: 'success', summary: 'Executed', detail: returnData.output });
+      }
+      console.log(returnData.output)
+    })
   }
 
   getScripts = async () => {
@@ -46,14 +54,7 @@ export class TabComponent implements OnInit {
   }
 
   execute = async (script: { id: string, title: string, code: string }) => {
-    this.spinners.push(script.id)
-    const returnData = await (window as any).api.executeScript(script.code)
-    if (returnData.error) {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: returnData.output });
-    } else {
-      this.messageService.add({ severity: 'success', summary: 'Executed', detail: returnData.output });
-    }
-    this.spinners = this.spinners.filter((id) => script.id != id)
+    await (window as any).api.executeScript(script.code)
   }
 
   copy = (text: string) => {

@@ -1,11 +1,12 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import { v4 as uuid } from 'uuid';
-import { execSync } from 'child_process';
+import { execSync, spawn, ChildProcessWithoutNullStreams } from 'child_process';
 
 
 let mainWindow: Electron.BrowserWindow;
 let Store: any
+let child: ChildProcessWithoutNullStreams
 
 import("electron-store").then((value) => {
   Store = new value.default()
@@ -34,6 +35,23 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow.destroy()
   });
+
+  mainWindow.webContents.on('did-finish-load', function() {
+    if(process.platform == "win32") {
+      child = spawn("cmd");
+    } else {
+      child = spawn("bash");
+    }
+    child.stdout.setEncoding('utf8');
+    child.stdout.on('data', function(data: string) {
+      mainWindow.webContents.send('scriptOutput', { output: data, error: false })
+    });
+    child.stderr.setEncoding('utf8');
+    child.stderr.on("data", function(data: string) {
+      mainWindow.webContents.send('scriptOutput', { output: data, error: true })
+    })
+  });
+
 }
 
 app.on('ready', createWindow);
@@ -83,11 +101,5 @@ ipcMain.handle('deleteScript', (event, id: string) => {
 })
 
 ipcMain.handle('executeScript', (event, code: string) => {
-  let returnData : { output: string, error: boolean }
-  try {
-    returnData = { output: execSync(code).toString(), error: false }
-  } catch (error: any) {
-    returnData = { output: error.message, error: true } 
-  }
-  return returnData
+  child.stdin.write(code+"\n")
 })
