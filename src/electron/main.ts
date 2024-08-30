@@ -1,12 +1,12 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import { v4 as uuid } from 'uuid';
-import { execSync, spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import { execSync, spawn, ChildProcess } from 'child_process';
 
 
 let mainWindow: Electron.BrowserWindow;
 let Store: any
-let child: ChildProcessWithoutNullStreams
+let child: ChildProcess
 
 import("electron-store").then((value) => {
   Store = new value.default()
@@ -38,10 +38,11 @@ function createWindow() {
 
   mainWindow.webContents.on('did-finish-load', function() {
     if(process.platform == "win32") {
-      child = spawn("cmd");
+      child = spawn("cmd", ['/Q','/K'], { cwd: undefined });
     } else {
       child = spawn("bash");
     }
+    if(child.stdout == null || child.stderr == null) return
     child.stdout.setEncoding('utf8');
     child.stdout.on('data', function(data: string) {
       mainWindow.webContents.send('scriptOutput', { output: data, error: false })
@@ -101,5 +102,6 @@ ipcMain.handle('deleteScript', (event, id: string) => {
 })
 
 ipcMain.handle('executeScript', (event, code: string) => {
-  child.stdin.write(code+"\n")
+  if(child.stdin)
+    child.stdin.write(code+"\n")
 })
