@@ -1,18 +1,21 @@
 {
   "name": "cli-flow",
   "version": "0.0.0",
-  "description": "ada",
   "main": "build/main.js",
+  "author": {
+    "name": "Sumanth Perambuduri",
+    "email": "sumanthpera444@gmail.com"
+  },
+  "description": "Build workflows",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href .",
+    "electron-start": "npm run electron-build && electron ./build/main.js --dev",
+    "angular-build": "ng build --base-href .",
     "electron-build": "tsc --project tsconfig.electron.json",
-    "electron": "npm run build && npm run electron-build && electron ./build/main.js",
-    "electron-dev": "npm run electron-build && electron ./build/main.js --dev",
-    "electron-package": "npm run build && npm run electron-build && npx electron-builder"
+    "electron-package": "npm run angular-build && npm run electron-build && npx electron-builder --publish never",
+    "electron-publish": "npm run angular-build && npm run electron-build && npx electron-builder --publish always"
   },
-  "author": "Sumanth Perambuduri <sumanthpera444@gmail.com> (https://sumanth.dev)",
   "private": true,
   "dependencies": {
     "@angular/animations": "^18.1.0",
@@ -43,8 +46,24 @@
   },
   "build": {
     "appId": "dev.sumanth.cliflow",
+    "productName": "CliFlow",
     "files": [
       "build/"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "supersu-man",
+        "repo": "cli-flow",
+        "releaseType": "release",
+        "private": false
+      }
     ]
   }
 }
