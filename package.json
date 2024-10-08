@@ -14,7 +14,10 @@
     "angular-build": "ng build --base-href .",
     "electron-build": "tsc --project tsconfig.electron.json",
     "electron-package": "npm run angular-build && npm run electron-build && npx electron-builder --publish never",
-    "electron-publish": "npm run angular-build && npm run electron-build && npx electron-builder --publish always"
+    "electron-publish": "npm run angular-build && npm run electron-build && npx electron-builder --publish always",
+    "patch": "npm version patch -m v%s && git push && git push --tags",
+    "minor": "npm version minor -m v%s && git push && git push --tags",
+    "major": "npm version major -m v%s && git push && git push --tags"
   },
   "private": true,
   "dependencies": {
